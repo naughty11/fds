@@ -1,0 +1,73 @@
+#include <iostream>
+using namespace std;
+
+const int N = 4; // Size of the chessboard
+
+// Function to print the chessboard
+void printBoard(int board[N][N]) {
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            cout << board[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << "-----------------" << endl;
+}
+
+// Function to check if it's safe to place a queen at board[row][col]
+bool isSafe(int board[N][N], int row, int col) {
+    // Check the row on the left side
+    for (int i = 0; i < col; ++i) {
+        if (board[row][i]) {
+            return false;
+        }
+    }
+
+    // Check upper diagonal on the left side
+    for (int i = row, j = col; i >= 0 && j >= 0; --i, --j) {
+        if (board[i][j]) {
+            return false;
+        }
+    }
+
+    // Check lower diagonal on the left side
+    for (int i = row, j = col; i < N && j >= 0; ++i, --j) {
+        if (board[i][j]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// Recursive function to solve the 4-queen problem
+void solveNQueens(int board[N][N], int col) {
+    if (col == N) {
+        // If all queens are placed, print the configuration
+        printBoard(board);
+        return;
+    }
+
+    for (int i = 0; i < N; ++i) {
+        if (isSafe(board, i, col)) {
+            // Place queen and move to the next column
+            board[i][col] = 1;
+
+            // Recur to place the rest of the queens
+            solveNQueens(board, col + 1);
+
+            // Backtrack and remove the queen to try a different position
+            board[i][col] = 0;
+        }
+    }
+}
+
+int main() {
+    int board[N][N] = {0}; // Initialize the chessboard
+
+    cout << "All possible configurations for the 4-queen problem:" << endl;
+    solveNQueens(board, 0);
+
+    return 0;
+}
+

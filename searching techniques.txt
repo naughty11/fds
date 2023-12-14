@@ -1,0 +1,86 @@
+def linear_search(arr, target):
+    for i in range(len(arr)):
+        if arr[i] == target:
+            return True
+    return False
+
+def sentinel_search(arr, target):
+    n = len(arr)
+    last_element = arr[n - 1]
+    arr[n - 1] = target
+    i = 0
+    while arr[i] != target:
+        i += 1
+    arr[n - 1] = last_element
+    if i < n - 1 or arr[n - 1] == target:
+        return True
+    return False
+
+def binary_search(arr, target):
+    low, high = 0, len(arr) - 1
+    while low <= high:
+        mid = (low + high) // 2
+        if arr[mid] == target:
+            return True
+        elif arr[mid] < target:
+            low = mid + 1
+        else:
+            high = mid - 1
+    return False
+
+def fibonacci_search(arr, target):
+    def fib(n):
+        if n <= 1:
+            return n
+        return fib(n - 1) + fib(n - 2)
+
+    n = len(arr)
+    fib_m_2, fib_m_1, fib = 0, 1, 1
+
+    while fib < n:
+        fib_m_2, fib_m_1, fib = fib_m_1, fib, fib_m_1 + fib_m_2
+
+    offset = -1
+
+    while fib > 1:
+        i = min(offset + fib_m_2, n - 1)
+        if arr[i] < target:
+            fib, fib_m_1, fib_m_2 = fib_m_1, fib_m_2, fib - fib_m_1
+            offset = i
+        elif arr[i] > target:
+            fib, fib_m_1, fib_m_2 = fib_m_2 - fib_m_1, fib_m_1 - fib_m_2, fib_m_2
+        else:
+            return True
+
+    if fib_m_1 and arr[offset + 1] == target:
+        return True
+
+    return False
+
+# Example usage for unsorted array:
+roll_numbers_unsorted = [10, 5, 8, 12, 3, 15, 7]
+student_roll_unsorted = 12
+
+if linear_search(roll_numbers_unsorted, student_roll_unsorted):
+    print(f"Student with roll number {student_roll_unsorted} attended the training program (Linear Search).")
+else:
+    print(f"Student with roll number {student_roll_unsorted} did not attend the training program (Linear Search).")
+
+if sentinel_search(roll_numbers_unsorted, student_roll_unsorted):
+    print(f"Student with roll number {student_roll_unsorted} attended the training program (Sentinel Search).")
+else:
+    print(f"Student with roll number {student_roll_unsorted} did not attend the training program (Sentinel Search).")
+
+# Example usage for sorted array:
+sorted_roll_numbers = [3, 5, 7, 8, 10, 12, 15]
+student_roll_sorted = 12
+
+if binary_search(sorted_roll_numbers, student_roll_sorted):
+    print(f"Student with roll number {student_roll_sorted} attended the training program (Binary Search).")
+else:
+    print(f"Student with roll number {student_roll_sorted} did not attend the training program (Binary Search).")
+
+if fibonacci_search(sorted_roll_numbers, student_roll_sorted):
+    print(f"Student with roll number {student_roll_sorted} attended the training program (Fibonacci Search).")
+else:
+    print(f"Student with roll number {student_roll_sorted} did not attend the training program (Fibonacci Search).")
